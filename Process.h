@@ -49,6 +49,7 @@ typedef enum ProcessFields {
    NLWP = 51,
    TGID = 52,
    PERCENT_NORM_CPU = 53,
+   TRANSLATED = 54,
 } ProcessField;
 
 typedef struct ProcessPidColumn_ {
@@ -87,6 +88,7 @@ typedef struct Process_ {
    uid_t st_uid;
    unsigned long int flags;
    int processor;
+   bool translated;
 
    float percent_cpu;
    float percent_mem;

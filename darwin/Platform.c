@@ -97,6 +97,7 @@ ProcessFieldData Process_fields[] = {
    [TIME] = { .name = "TIME", .title = "  TIME+  ", .description = "Total time the process has spent in user and system time", .flags = 0, },
    [NLWP] = { .name = "NLWP", .title = "NLWP ", .description = "Number of threads in the process", .flags = 0, },
    [TGID] = { .name = "TGID", .title = "   TGID ", .description = "Thread group ID (i.e. process ID)", .flags = 0, },
+   [TRANSLATED] = { .name = "TRANSLATED", .title = "T ", .description = "T if the process is running under translation", .flags = 0, },
    [100] = { .name = "*** report bug! ***", .title = NULL, .description = NULL, .flags = 0, },
 };
 

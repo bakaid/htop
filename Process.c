@@ -349,6 +349,7 @@ void Process_writeField(const Process* this, RichString* str, ProcessField field
       break;
    }
    case PROCESSOR: xSnprintf(buffer, n, "%3d ", Settings_cpuId(this->settings, this->processor)); break;
+   case TRANSLATED: xSnprintf(buffer, n, "%c ", this->translated ? 'T' : ' '); break;
    case SESSION: xSnprintf(buffer, n, Process_pidFormat, this->session); break;
    case STARTTIME: xSnprintf(buffer, n, "%s", this->starttime_show); break;
    case STATE: {
@@ -550,6 +551,8 @@ long Process_compare(const void* v1, const void* v2) {
       return SPACESHIP_NUMBER(p1->tgid, p2->tgid);
    case TPGID:
       return SPACESHIP_NUMBER(p1->tpgid, p2->tpgid);
+   case TRANSLATED:
+      return SPACESHIP_NUMBER(p1->translated, p2->translated);
    case TTY_NR:
       return SPACESHIP_NUMBER(p1->tty_nr, p2->tty_nr);
    case USER:
