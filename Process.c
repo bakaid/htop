@@ -349,7 +349,7 @@ void Process_writeField(const Process* this, RichString* str, ProcessField field
       break;
    }
    case PROCESSOR: xSnprintf(buffer, n, "%3d ", Settings_cpuId(this->settings, this->processor)); break;
-   case TRANSLATED: xSnprintf(buffer, n, "%c ", this->translated ? 'T' : ' '); break;
+   case TRANSLATED: xSnprintf(buffer, n, "%c ", this->translated ? 'T' : 'N'); break;
    case SESSION: xSnprintf(buffer, n, Process_pidFormat, this->session); break;
    case STARTTIME: xSnprintf(buffer, n, "%s", this->starttime_show); break;
    case STATE: {
