@@ -12,6 +12,11 @@ in the source distribution for its full text.
 #include "DarwinProcessList.h"
 #include "Settings.h"
 
+typedef enum DarwinProcessFields_ {
+   // Add platform-specific fields here, with ids >= 100
+   TRANSLATED = 100,
+   LAST_PROCESSFIELD = 101,
+} DarwinProcessField;
 
 typedef struct DarwinProcess_ {
    Process super;
@@ -19,17 +24,24 @@ typedef struct DarwinProcess_ {
    uint64_t utime;
    uint64_t stime;
    bool taskAccess;
+   bool translated;
 } DarwinProcess;
 
 extern const ProcessClass DarwinProcess_class;
+
+extern ProcessFieldData Process_fields[];
 
 Process* DarwinProcess_new(const Settings* settings);
 
 void Process_delete(Object* cast);
 
+void DarwinProcess_writeField(const Process* this, RichString* str, ProcessField field);
+
+long DarwinProcess_compare(const void* v1, const void* v2);
+
 bool Process_isThread(const Process* this);
 
-void DarwinProcess_setFromKInfoProc(Process* proc, const struct kinfo_proc* ps, bool exists);
+void DarwinProcess_setFromKInfoProc(DarwinProcess* proc, const struct kinfo_proc* ps, bool exists);
 
 void DarwinProcess_setFromLibprocPidinfo(DarwinProcess* proc, DarwinProcessList* dpl);
 
