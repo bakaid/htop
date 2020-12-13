@@ -203,7 +203,7 @@ void ProcessList_goThroughEntries(ProcessList* super, bool pauseProcessUpdate) {
    for (size_t i = 0; i < count; ++i) {
       proc = (DarwinProcess*)ProcessList_getProcess(super, ps[i].kp_proc.p_pid, &preExisting, DarwinProcess_new);
 
-      DarwinProcess_setFromKInfoProc(proc, &ps[i], preExisting);
+      DarwinProcess_setFromKInfoProc(&proc->super, &ps[i], preExisting);
       DarwinProcess_setFromLibprocPidinfo(proc, dpl);
 
       // Disabled for High Sierra due to bug in macOS High Sierra

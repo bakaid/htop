@@ -261,7 +261,9 @@ ERROR_A:
    return retval;
 }
 
-void DarwinProcess_setFromKInfoProc(DarwinProcess* proc, const struct kinfo_proc* ps, bool exists) {
+void DarwinProcess_setFromKInfoProc(Process* proc, const struct kinfo_proc* ps, bool exists) {
+   DarwinProcess* dp = (DarwinProcess*)proc;
+
    const struct extern_proc* ep = &ps->kp_proc;
 
    /* UNSET HERE :
@@ -280,32 +282,32 @@ void DarwinProcess_setFromKInfoProc(DarwinProcess* proc, const struct kinfo_proc
    /* First, the "immutable" parts */
    if (!exists) {
       /* Set the PID/PGID/etc. */
-      proc->super.pid = ep->p_pid;
-      proc->super.ppid = ps->kp_eproc.e_ppid;
-      proc->super.pgrp = ps->kp_eproc.e_pgid;
-      proc->super.session = 0; /* TODO Get the session id */
-      proc->super.tpgid = ps->kp_eproc.e_tpgid;
-      proc->super.tgid = proc->super.pid;
-      proc->super.st_uid = ps->kp_eproc.e_ucred.cr_uid;
+      proc->pid = ep->p_pid;
+      proc->ppid = ps->kp_eproc.e_ppid;
+      proc->pgrp = ps->kp_eproc.e_pgid;
+      proc->session = 0; /* TODO Get the session id */
+      proc->tpgid = ps->kp_eproc.e_tpgid;
+      proc->tgid = proc->pid;
+      proc->st_uid = ps->kp_eproc.e_ucred.cr_uid;
       /* e_tdev = (major << 24) | (minor & 0xffffff) */
       /* e_tdev == -1 for "no device" */
-      proc->super.tty_nr = ps->kp_eproc.e_tdev & 0xff; /* TODO tty_nr is unsigned */
-      proc->translated = ps->kp_proc.p_flag & P_TRANSLATED;
+      proc->tty_nr = ps->kp_eproc.e_tdev & 0xff; /* TODO tty_nr is unsigned */
+      dp->translated = ps->kp_proc.p_flag & P_TRANSLATED;
 
-      proc->super.starttime_ctime = ep->p_starttime.tv_sec;
-      Process_fillStarttimeBuffer(&proc->super);
+      proc->starttime_ctime = ep->p_starttime.tv_sec;
+      Process_fillStarttimeBuffer(proc);
 
-      proc->super.comm = DarwinProcess_getCmdLine(ps, &(proc->super.basenameOffset));
+      proc->comm = DarwinProcess_getCmdLine(ps, &(proc->basenameOffset));
    }
 
    /* Mutable information */
-   proc->super.nice = ep->p_nice;
-   proc->super.priority = ep->p_priority;
+   proc->nice = ep->p_nice;
+   proc->priority = ep->p_priority;
 
-   proc->super.state = (ep->p_stat == SZOMB) ? 'Z' : '?';
+   proc->state = (ep->p_stat == SZOMB) ? 'Z' : '?';
 
    /* Make sure the updated flag is set */
-   proc->super.updated = true;
+   proc->updated = true;
 }
 
 void DarwinProcess_setFromLibprocPidinfo(DarwinProcess* proc, DarwinProcessList* dpl) {

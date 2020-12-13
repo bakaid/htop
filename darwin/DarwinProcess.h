@@ -41,7 +41,7 @@ long DarwinProcess_compare(const void* v1, const void* v2);
 
 bool Process_isThread(const Process* this);
 
-void DarwinProcess_setFromKInfoProc(DarwinProcess* proc, const struct kinfo_proc* ps, bool exists);
+void DarwinProcess_setFromKInfoProc(Process* proc, const struct kinfo_proc* ps, bool exists);
 
 void DarwinProcess_setFromLibprocPidinfo(DarwinProcess* proc, DarwinProcessList* dpl);
 
